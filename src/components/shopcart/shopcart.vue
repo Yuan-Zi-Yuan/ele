@@ -1,48 +1,53 @@
 <template>
-  <div class="shopcart">
-    <div class="content" @click="toggleList">
-      <div class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight':totalCount>0}">
-            <i class="icon-shopping_cart"></i>
-          </div>
-        </div>
-        <div v-show="totalCount>0" class="num">{{totalCount}}</div>
-        <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-        <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
-      </div>
-      <div class="content-right">
-        <div class="pay" :class="{'enough':enough}">{{payDesc}}</div>
-      </div>
-      <div class="ball-container">
-        <div v-for="ball in balls">
-          <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-            <div class="ball" v-show="ball.show">
-              <div class="inner inner-hook"></div>
+  <div>
+    <div class="shopcart">
+      <div class="content" @click="toggleList">
+        <div class="content-left">
+          <div class="logo-wrapper">
+            <div class="logo" :class="{'highlight':totalCount>0}">
+              <i class="icon-shopping_cart"></i>
             </div>
-          </transition>
+          </div>
+          <div v-show="totalCount>0" class="num">{{totalCount}}</div>
+          <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
+          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
+        <div class="content-right">
+          <div class="pay" :class="{'enough':enough}">{{payDesc}}</div>
+        </div>
+        <div class="ball-container">
+          <div v-for="ball in balls">
+            <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+              <div class="ball" v-show="ball.show">
+                <div class="inner inner-hook"></div>
+              </div>
+            </transition>
+          </div>
+        </div>
+        <transition name="fold">
+          <div class="shopcart-list" v-show="listShow">
+            <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="empty" @click="empty">清空</span>
+            </div>
+            <div class="list-content" ref="listContent">
+              <ul>
+                <li class="food" v-for="food in selectFoods">
+                  <span class="name">{{food.name}}</span>
+                  <div class="cartcontrol-wrapper">
+                    <span class="price">￥{{food.price * food.count}}</span>
+                    <cartcontrol :food="food"></cartcontrol>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </transition>
       </div>
-      <transition>
-        <div class="shopcart-list" v-show="listShow">
-          <div class="list-header">
-            <h1 class="title">购物车</h1>
-            <span class="empty" @click="empty">清空</span>
-          </div>
-          <div class="list-content" ref="listContent">
-            <ul>
-              <li class="food" v-for="food in selectFoods">
-                <span class="name">{{food.name}}</span>
-                <div class="cartcontrol-wrapper">
-                  <span class="price">￥{{food.price * food.count}}</span>
-                  <cartcontrol :food="food"></cartcontrol>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </transition>
     </div>
+    <transition name="fade">
+      <div class="list-mask" @click="hideList" v-show="listShow"></div>
+    </transition>
   </div>
 </template>
 
@@ -147,6 +152,9 @@
       }
     },
     methods: {
+      hideList() {
+        this.fold = true;
+      },
       empty() {
         this.selectFoods.forEach((food) => {
           food.count = 0;
@@ -363,4 +371,21 @@
             .cartcontrol
               display: inline-block
               vertical-align: middle
+
+  .list-mask
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 40
+    backdrop-filter: blur(10px)
+    opacity: 1
+    background: rgba(7, 17, 27, 0.6)
+    &.fade-enter-active, &.fade-leave-active
+      transition: all 0.5s
+    &.fade-enter, &.fade-leave-active
+      opacity: 0
+      background: rgba(7, 17, 27, 0)
+
 </style>

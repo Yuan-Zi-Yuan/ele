@@ -22,7 +22,6 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 # ele
 
 
-界面截图（interface）
 ![Image text](https://raw.githubusercontent.com/Yuan-Zi-Yuan/ele/master/interface/1.png)
 ![Image text](https://raw.githubusercontent.com/Yuan-Zi-Yuan/ele/master/interface/2.png)
 ![Image text](https://raw.githubusercontent.com/Yuan-Zi-Yuan/ele/master/interface/3.png)
